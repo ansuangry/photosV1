@@ -12,7 +12,7 @@ $facebook = new Facebook(array(
 ));
 
 // Get User ID
-$new_access_token = "CAAKhjlGQsZBkBAJnXh6sG6mZAne69fLxm4mVQsFDwMBzesYksGyRvut8gQOJeX8ri3FXnDqZCLhINA1TXPmvqB6Q6zqdOnqBU4lDGOzogHPAjA1JslVuLtTZB8usX2b2NJdeqeOojStGwtcMIabGTVja1bGCCTwtUE431liuDNkn0l9XjrmH";
+$new_access_token = "CAAKhjlGQsZBkBAGBpdvQIZCU83FuqEXzZCCcmLpn5Oo6zVD2s3GFboYIKNOQzy4GJq7fSw6bklNh9HOGNPACx8UWqjfCLuB2f832ELM4NM8eyQ2CvnPv9Mihb1036rHICupNVY5LSdtPQszOezfmxhpVUMRskne1AyiZAK6J2NOh0ZCZCTglZAsvn0zFWEtqQZBnL2aY2KCWT03Ku9AgwhZC7";
 $facebook->setAccessToken($new_access_token);
 $user = $facebook->getUser();
 $access_token = $facebook->getAccessToken();
