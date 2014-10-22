@@ -48,6 +48,7 @@ $user_like = array();
 
 // $user_like = array_merge($user_like, chunk_results(array(),'/me/likes?limit=5000'));
 $user_like = FB_Chunk('/me/likes');
+var_dump($user_like);
 $images = getAlbums($user_like);
 // echo json_encode($images);
 
@@ -245,20 +246,4 @@ while(in_array("paging", $data) && array_key_exists("next", $data["paging"])) {
 
 */
 
-
 ?>
-<!--
-<h1>php-sdk</h1>
-
-    <?php if ($user): ?>
-      <a href="<?php echo $logoutUrl; ?>">Logout</a>
-    <?php else: ?>
-      <div>
-        Check the login status using OAuth 2.0 handled by the PHP SDK:
-        <a href="<?php echo $statusUrl; ?>">Check the login status</a>
-      </div>
-      <div>
-        Login using OAuth 2.0 handled by the PHP SDK:
-        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
-      </div>
-    <?php endif ?>   -->
