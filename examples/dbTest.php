@@ -8,20 +8,29 @@
         //      die ('Connected!');
         //  }
         
-    $ip =  getenv("REMOTE_ADDR");
-    $port = "3306";
-    $user = getenv('C9_USER');
-    $DB = "C9";
+    require_once __DIR__ . '/db_connect.php';
+ 
+    // connecting to db
+    $db = new DB_CONNECT();    
     
-     // Create connection
-    $con=mysqli_connect($ip, $user, "", "C9");
+    var_dump($db);
+        
+    // $ip =  getenv('IP');
+    // $port = "3306";
+    // $user = getenv('C9_USER');
+    // $DB = "c9";
+    
+    //  // Create connection
+    // $con=mysqli_connect($ip, $user, "", $DB);
 
-    //mysqli_connect(host,username,password,dbname); << guideline
+    // //mysqli_connect(host,username,password,dbname); << guideline
 
-    // Check connection
-    if (mysqli_connect_errno()) {
-      echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    }
+    // // Check connection
+    // if (mysqli_connect_errno()) {
+    //   echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    // }else{
+    //     echo "succes!";
+    // }
     
     
     // echo "-1" ;
