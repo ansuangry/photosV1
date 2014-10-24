@@ -34,26 +34,27 @@
     get_start();
     
     function get_start(){
-        $user_like = getLikeFromDb();
-        
-        for ($i= 0; $i <= count($user_like); $i++){
-            echo "==== Start ====== ". $user_like[$i]['facebook_id'] ."\n";
-            $AlbumsOfLike = getAlbums($user_like[$i]['facebook_id']) ;
-            for($j=0; $j <= count($AlbumsOfLike); $j++){
-                if(!checkID($AlbumsOfLike[$j]['id'])){
-                    Insert($AlbumsOfLike[$j]);
+        $albums = getAlbumsFromDb();
+        for ($i= 0; $i <= count($albums); $i++){
+            echo "==== Sta ====== ". $albums[$i]['facebook_id'] ."\n";
+            $PhotosOfAlbums = getPhotos($albums[$i]['facebook_id']) ; 
+            // $PhotosOfAlbums = getPhotos("237847593033826") ; 
+            // var_dump($PhotosOfAlbums);
+            for($j=0; $j <= count($PhotosOfAlbums); $j++){
+                if(!checkID($PhotosOfAlbums[$j]['id'])){
+                    Insert($PhotosOfAlbums[$j]);
                 }
             }
-            UpadeLikeDB($user_like[$i]['id']);
-            echo "==== end ====== ". $user_like[$i]['facebook_id'] . "\n";
-            $check = getLikeFromDb();;
+            UpadeAlbumsDB($albums[$i]['id']);
+            echo "==== end ====== ". $albums[$i]['facebook_id'] . "\n";
+            $check = getAlbumsFromDb();
             if (count($check)>0){
                 get_start();
             }
         }
     }
     
-    function getLikeFromDb(){
+    function getAlbumsFromDb(){
         $servername= getenv('IP');
         $username= getenv('C9_USER');
         $password= '';
@@ -66,7 +67,7 @@
             die("Connection failed: " . $conn->connect_error);
         }
         
-        $result= mysqli_query($conn, "SELECT * FROM LIKES WHERE isUploaded = 0 LIMIT 1");
+        $result= mysqli_query($conn, "SELECT * FROM ALBUMS WHERE isUploaded = 0 LIMIT 1");
         $result_array = array();
         while($row = mysqli_fetch_assoc($result))
         {
@@ -76,7 +77,7 @@
         return $result_array ;
     }
     
-    function UpadeLikeDB($id){
+    function UpadeAlbumsDB($id){
         $servername= getenv('IP');
         $username= getenv('C9_USER');
         $password= '';
@@ -89,16 +90,16 @@
             die("Connection failed: " . $conn->connect_error);
         }
     
-        $result= mysqli_query($conn, "UPDATE LIKES SET isUploaded=1 WHERE id='$id'");
+        $result= mysqli_query($conn, "UPDATE ALBUMS SET isUploaded=1 WHERE id='$id'");
         mysqli_close($conn);
     }
     
-    function getAlbums($id){
-        $albums= array();
-        $albums_single= array();
-        $albums_single= FB_Chunk($id.'/albums');
-        $albums= array_merge($albums, $albums_single); 
-        return $albums ;
+    function getPhotos($id){
+        $photos= array();
+        $photos_single= array();
+        $photos_single= FB_Chunk($id.'/photos');
+        $photos= array_merge($photos, $photos_single);
+        return $photos ;
     }
     
     function Insert($array){
@@ -114,12 +115,20 @@
         die("Connection failed: " . $conn->connect_error);
             }
     
-        $facebook_id= mysqli_real_escape_string($conn, $array['id']);
-        $type= mysqli_real_escape_string($conn, $array['type']);
-        $name= mysqli_real_escape_string($conn, $array['name']);
-        $count= mysqli_real_escape_string($conn, $array['count']);
-        //INSERT INTO `albums` (`id`, `facebook_id`, `type`, `name`, `count`) VALUES (1, 180942772043153, 'wall', 'Timeline Photos', 2414);
-        $sql='INSERT INTO ALBUMS (facebook_id, type, name, count, isUploaded) VALUES ( '.$facebook_id.', \''.$type.'\', \''.$name.'\',\''.$count.'\', 0);' ;
+        $id= mysqli_real_escape_string($conn, $array['id']);
+        $created_time= mysqli_real_escape_string($conn, $array['created_time']);
+        $comments= mysqli_real_escape_string($conn, $array['comments']);
+        $from= mysqli_real_escape_string($conn, $array['from']);
+        $height= mysqli_real_escape_string($conn, $array['height']);
+        $width= mysqli_real_escape_string($conn, $array['width']);
+        $icon= mysqli_real_escape_string($conn, $array['icon']);
+        $source= mysqli_real_escape_string($conn, $array['source']);
+        $images= mysqli_real_escape_string($conn, $array['images']);
+        $picture= mysqli_real_escape_string($conn, $array['picture']);
+        
+        $sql='INSERT INTO photos (l_id, a_id, comments, created_time, height, width, icon, source, images, picture, photo_id) VALUES 
+            ( 0, 0, \''.$comments.'\', \''.$created_time.'\', \''.$height.'\', \''.$width.'\', \''.$icon.'\', \''.$source.'\', \''.$images.'\', \''.$picture.'\', \''.$id.'\');' ;
+
         $result= mysqli_query($conn, $sql);
         
         if ($result) {
@@ -145,7 +154,7 @@
             die("Connection failed: " . $conn->connect_error);
         }
     
-        $result= mysqli_query($conn, "SELECT 1 FROM ALBUMS WHERE facebook_id='$id' LIMIT 1");
+        $result= mysqli_query($conn, "SELECT 1 FROM photos WHERE photo_id='$id' LIMIT 1");
     
         if (mysqli_fetch_row($result) > 0) {
             mysqli_close($conn);
