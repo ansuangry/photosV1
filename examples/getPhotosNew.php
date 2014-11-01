@@ -128,7 +128,9 @@
         
         $sql='INSERT INTO photos (l_id, a_id, comments, created_time, height, width, icon, source, images, picture, photo_id) VALUES 
             ( 0, 0, \''.$comments.'\', \''.$created_time.'\', \''.$height.'\', \''.$width.'\', \''.$icon.'\', \''.$source.'\', \''.$images.'\', \''.$picture.'\', \''.$id.'\');' ;
-
+        
+        echo $sql ;
+    
         $result= mysqli_query($conn, $sql);
         
         if ($result) {
